@@ -1,0 +1,17 @@
+<ion-view view-title="Home Page">
+  <ion-content class="padding">
+    <h2>Welcome to your maths helper app</h2>
+    <p>This is an app to help you with learning logs and storing your favorites online. </p>
+    
+      
+      <div class="list list-inset">
+          <label class="item item-input">
+              <input type="text" placeholder="Username" ng-model="data.username">
+          </label>
+          <label class="item item-input">
+              <input type="password" placeholder="Password" ng-model="data.password">
+          </label>
+      </div>
+      <button class="button button-block button-calm" ng-click="login()">Login</button>
+  </ion-content>
+</ion-view>
