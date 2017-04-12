@@ -1,5 +1,18 @@
-<ion-view view-title="Log table">
-  <ion-content>
-    
+<ion-view view-title="Log Page">
+  <ion-content class="padding" ng-controller="LogsCtrl">
+    <br />
+    <div class="card">
+    <div class="list list-inset">
+        <label class="item item-input">
+            <input type="text" placeholder="Log" ng-model="data.Log">
+        </label>
+        <label class="item item-input">
+            <input type="text" placeholder="Comment" ng-model="data.comment">
+        </label>
+    </div>
+    <button class="button button-block button-calm" ng-click="addToDB()">Add</button>
+    </div>
+
+
   </ion-content>
 </ion-view>
