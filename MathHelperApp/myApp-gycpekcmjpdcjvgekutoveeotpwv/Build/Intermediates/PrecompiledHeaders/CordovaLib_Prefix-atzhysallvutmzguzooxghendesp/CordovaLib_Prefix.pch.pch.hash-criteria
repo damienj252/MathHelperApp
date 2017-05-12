@@ -1,0 +1,27 @@
+-x
+objective-c
+-arch
+x86_64
+-std=c99
+-fobjc-arc
+-fmodules
+-fmodules-cache-path=/Users/damien/Documents/GMIT/3rdYear/Second Semester/ThirdYearProject/myApp/ModuleCache
+-fbuild-session-file=/Users/damien/Documents/GMIT/3rdYear/Second Semester/ThirdYearProject/myApp/ModuleCache/Session.modulevalidation
+-fpascal-strings
+-O0
+-isysroot
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator10.3.sdk
+-fasm-blocks
+-mios-simulator-version-min=6.0
+-g
+-fobjc-abi-version=2
+-fobjc-legacy-dispatch
+-iquote
+-iquote
+-I/Users/damien/Documents/GMIT/3rdYear/Second Semester/ThirdYearProject/myApp/myApp-gycpekcmjpdcjvgekutoveeotpwv/Build/Products/Debug-iphonesimulator/include
+-F/Users/damien/Documents/GMIT/3rdYear/Second Semester/ThirdYearProject/myApp/myApp-gycpekcmjpdcjvgekutoveeotpwv/Build/Products/Debug-iphonesimulator
+-DDEBUG
+x86_64-apple-darwin16.5.0
+"4.2.1 Compatible Apple LLVM 8.1.0 (clang-802.0.42)"
+SDK_PRODUCT_BUILD_VERSION=14E269
+14E269
