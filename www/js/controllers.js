@@ -70,12 +70,12 @@ angular.module('starter.controllers', ['firebase'])
 
 .controller('LoginCtrl', function(Auth, $state)
 {
-      this.loginWithFacebook = function loginWithFacebook()
-      {
-        Auth.$authWithOAuthPopup('facebook')
-          .then(function(authData) {
-            $state.go('tab.dashboard');
-          });
+
+  this.loginWithGoogle = function loginWithGoogle() {
+    Auth.$authWithOAuthPopup('google')
+      .then(function(authData) {
+        $state.go('tab.dashboard');
+      });
   };
 //LoginCtrl.$inject = ['Auth', '$state'];
 })
