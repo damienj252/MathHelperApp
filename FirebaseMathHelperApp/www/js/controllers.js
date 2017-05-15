@@ -68,14 +68,35 @@ angular.module('starter.controllers', ['firebase'])
    $state.go('calculator', {}, {location: "replace"});
  })
 
-.controller('LoginCtrl', function(Auth, $state)
+ .controller('LoginCtrl',['$scope','$ionicModal','Auth','$location', function ($scope,$ionicModal,$location,Auth)
 {
+
       this.loginWithFacebook = function loginWithFacebook()
       {
-        Auth.$authWithOAuthPopup('facebook')
-          .then(function(authData) {
+        Auth.$authWithOAuthPopup('facebookx')
+          .then(function(authData)
+          {
             $state.go('tab.dashboard');
           });
-  };
-//LoginCtrl.$inject = ['Auth', '$state'];
-})
+
+          /*
+        $scope.login = function()
+        {
+
+          var username = $scope.email;
+          var password = $scope.password;
+
+          Auth.$authWithPassword({
+                  email: username,
+                  password: password
+              })
+              .then(function(authData) {
+          console.log("Logged in as:", authData.uid);
+          }).catch(function(error) {
+          console.error("Authentication failed:", error);
+          });
+
+        }*/
+      }
+
+}])
