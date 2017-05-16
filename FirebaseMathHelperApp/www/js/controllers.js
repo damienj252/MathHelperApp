@@ -68,15 +68,21 @@ angular.module('starter.controllers', ['firebase'])
    $state.go('calculator', {}, {location: "replace"});
  })
 
- .controller('LoginCtrl',['$scope','$ionicModal','Auth','$location', function ($scope,$ionicModal,$location,Auth)
+.controller('LoginCtrl', function(Auth, $state)
 {
-  $scope.login = function scopeLogin() {
-    Auth.loginWithFacebook()
-    .then(function(authData){
-      console.log('We are logged in!', authData);
-    })
-    .catch(function(error) {
-      console.error(error);
-    });
+
+  this.loginWithGoogle = function loginWithGoogle() {
+    Auth.$authWithOAuthPopup('google')
+      .then(function(authData) {
+        $state.go('tab.dashboard');
+      });
+
+      this.loginWithFacebook = function loginWithFacebook() {
+        Auth.$authWithOAuthPopup('facebook')
+          .then(function(authData) {
+            $state.go('tab.dashboard');
+          });
+        }
   };
-}])
+//LoginCtrl.$inject = ['Auth', '$state'];
+})

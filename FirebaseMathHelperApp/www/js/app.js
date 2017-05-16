@@ -10,8 +10,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
 function ApplicationRun($ionicPlatform, $rootScope, $state)
 {
-  $ionicPlatform.ready(function()
-  {
+  $ionicPlatform.ready(function() {
 
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard)
     {
@@ -19,55 +18,20 @@ function ApplicationRun($ionicPlatform, $rootScope, $state)
       cordova.plugins.Keyboard.disableScroll(true);
     }
     if (window.StatusBar)
-    {
+     {
 
       StatusBar.styleDefault();
     }
   });
 
-      // constructor injection for a Firebase reference
-      app.service('Root', ['FBURL', Firebase]);
-
-      // create a custom Auth factory to handle $firebaseAuth
-      app.factory('Auth', function($firebaseAuth, Root, $timeout)
-      {
-          var auth = $firebaseAuth(Root);
-          return
-          {
-          // helper method to login with multiple providers
-          loginWithProvider: function loginWithProvider(provider)
-          {
-            return auth.$authWithOAuthPopup(provider);
-          }
-          // convenience method for logging in with Facebook
-          loginWithFacebook: function login()
-          {
-            return this.loginWithProvider("facebook");
-          }
-          // wrapping the unauth function
-          logout: function logout()
-          {
-            auth.$unauth();
-          }
-          // wrap the $onAuth function with $timeout so it processes
-          // in the digest loop.
-          onAuth: function onLoggedIn(callback)
-          {
-            auth.$onAuth(function(authData)
-            {
-              $timeout(function()
-            {
-              callback(authData);
-            });
-          });
-        }
-          $state.go('dashboard');
-      }
-    })
-
-
-
-
+  $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
+    // We can catch the error thrown when the $requireAuth promise is rejected
+    // and redirect the user back to the home page
+    if (error === 'AUTH_REQUIRED') {
+      $state.go('login');
+    }
+  });
+}
 
 ApplicationRun.$inject = ['$ionicPlatform', '$rootScope', '$state'];
 
@@ -76,8 +40,7 @@ function AuthDataResolver(Auth) {
 }
 AuthDataResolver.$inject = ['Auth'];
 
-function ApplicationConfig($stateProvider, $urlRouterProvider)
-{
+function ApplicationConfig($stateProvider, $urlRouterProvider) {
 
   $stateProvider
 
@@ -180,6 +143,5 @@ example.controller("LogsCtrl", function($scope, $cordovaSQLite)
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
 
-}
 }
 ApplicationConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
