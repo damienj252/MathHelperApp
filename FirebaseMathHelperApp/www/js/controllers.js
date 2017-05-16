@@ -70,33 +70,13 @@ angular.module('starter.controllers', ['firebase'])
 
  .controller('LoginCtrl',['$scope','$ionicModal','Auth','$location', function ($scope,$ionicModal,$location,Auth)
 {
-
-      this.loginWithFacebook = function loginWithFacebook()
-      {
-        Auth.$authWithOAuthPopup('facebookx')
-          .then(function(authData)
-          {
-            $state.go('tab.dashboard');
-          });
-
-          /*
-        $scope.login = function()
-        {
-
-          var username = $scope.email;
-          var password = $scope.password;
-
-          Auth.$authWithPassword({
-                  email: username,
-                  password: password
-              })
-              .then(function(authData) {
-          console.log("Logged in as:", authData.uid);
-          }).catch(function(error) {
-          console.error("Authentication failed:", error);
-          });
-
-        }*/
-      }
-
+  $scope.login = function scopeLogin() {
+    Auth.loginWithFacebook()
+    .then(function(authData){
+      console.log('We are logged in!', authData);
+    })
+    .catch(function(error) {
+      console.error(error);
+    });
+  };
 }])
