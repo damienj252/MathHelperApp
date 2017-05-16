@@ -2,7 +2,7 @@ angular.module('starter.controllers', ['firebase'])
 
 //Dashboard page controller--------------------------------------------------------------------------
 .controller('DashboardCtrl', function($location)
-  {
+{
     /*
     $scope.logout = function()
     {
@@ -71,18 +71,45 @@ angular.module('starter.controllers', ['firebase'])
 .controller('LoginCtrl', function(Auth, $state)
 {
 
-  this.loginWithGoogle = function loginWithGoogle() {
+  this.loginWithGoogle = function loginWithGoogle()
+   {
     Auth.$authWithOAuthPopup('google')
-      .then(function(authData) {
+      .then(function(authData)
+      {
         $state.go('tab.dashboard');
       });
 
-      this.loginWithFacebook = function loginWithFacebook() {
-        Auth.$authWithOAuthPopup('facebook')
-          .then(function(authData) {
-            $state.go('tab.dashboard');
-          });
-        }
-  };
+          this.loginWithFacebook = function loginWithFacebook()
+          {
+            Auth.$authWithOAuthPopup('facebook')
+            loginWithFacebook({ scope: 'email' }).then(
+              function (response)
+              {
+                if (response.status === 'connected')
+                {
+                    console.log('Facebook login succeeded', response);
+
+                    var credential = firebase.auth.FacebookAuthProvider.credential
+                    (
+                        response.authResponse.accessToken);
+
+                    firebase.auth().signInWithCredential(credential).catch(function (error)
+                    {
+                        // Handle Errors here.
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        // The email of the user's account used.
+                        var email = error.email;
+                        // The firebase.auth.AuthCredential type that was used.
+                        var credential = error.credential;
+                    });
+
+                } else
+                {
+                    alert('Facebook login failed');
+                }
+            })
+          };
+    }
+  });
 //LoginCtrl.$inject = ['Auth', '$state'];
-})
