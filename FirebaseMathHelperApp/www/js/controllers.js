@@ -78,38 +78,47 @@ angular.module('starter.controllers', ['firebase'])
       {
         $state.go('tab.dashboard');
       });
-
-          this.loginWithFacebook = function loginWithFacebook()
-          {
-            Auth.$authWithOAuthPopup('facebook')
-            loginWithFacebook({ scope: 'email' }).then(
-              function (response)
-              {
-                if (response.status === 'connected')
-                {
-                    console.log('Facebook login succeeded', response);
-
-                    var credential = firebase.auth.FacebookAuthProvider.credential
-                    (
-                        response.authResponse.accessToken);
-
-                    firebase.auth().signInWithCredential(credential).catch(function (error)
-                    {
-                        // Handle Errors here.
-                        var errorCode = error.code;
-                        var errorMessage = error.message;
-                        // The email of the user's account used.
-                        var email = error.email;
-                        // The firebase.auth.AuthCredential type that was used.
-                        var credential = error.credential;
-                    });
-
-                } else
-                {
-                    alert('Facebook login failed');
-                }
-            })
-          };
     }
+//----------------------------------------------------------------------------------------
+this.loginWithFacebook = function loginWithFacebook()
+{
+  Auth.$authWithOAuthPopup('facebook')
+  loginWithFacebook({ scope: 'email' }).then(
+    function (response)
+    {
+      if (response.status === 'connected')
+      {
+          console.log('Facebook login succeeded', response);
+
+          var credential = firebase.auth.FacebookAuthProvider.credential
+          (
+              response.authResponse.accessToken);
+
+          firebase.auth().signInWithCredential(credential).catch(function (error)
+          {
+              // Handle Errors here.
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              // The email of the user's account used.
+              var email = error.email;
+              // The firebase.auth.AuthCredential type that was used.
+              var credential = error.credential;
+          });
+
+      } else
+      {
+          alert('Facebook login failed');
+      }
+  })
+};
+//----------------------------------------------------------------------------------------
+          this.loginWithTwitter = function loginWithTwitter()
+           {
+            Auth.$authWithOAuthPopup('twitter')
+              .then(function(authData)
+              {
+                $state.go('tab.dashboard');
+              });
+            }
   });
 //LoginCtrl.$inject = ['Auth', '$state'];
