@@ -44,27 +44,32 @@ function ApplicationConfig($stateProvider, $urlRouterProvider) {
 
   $stateProvider
 
-  .state('login', {
+  .state('login',
+  {
     url: '/login',
     templateUrl: 'templates/login.html',
     controller: 'LoginCtrl as ctrl'
   })
 
   // setup an abstract state for the tabs directive
-  .state('tab', {
+  .state('tab',
+  {
     url: '/tab',
     abstract: true,
     templateUrl: 'templates/tabs.html',
-    resolve: {
+    resolve:
+    {
       authData: AuthDataResolver
     }
   })
 
 //Dashboard ---------------------------------------------------------------------------------
-  .state('tab.dashboard', {
+  .state('tab.dashboard',
+  {
     url: '/dashboard',
     views: {
-      'tab-dashboard': {
+      'tab-dashboard':
+      {
         templateUrl: 'templates/tab-dashboard.html',
         controller: 'DashboardCtrl'
       }

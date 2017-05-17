@@ -80,6 +80,7 @@ angular.module('starter.controllers', ['firebase'])
       });
     }
 //----------------------------------------------------------------------------------------
+/*
 this.loginWithFacebook = function loginWithFacebook()
 {
   Auth.$authWithOAuthPopup('facebook')
@@ -111,6 +112,7 @@ this.loginWithFacebook = function loginWithFacebook()
       }
   })
 };
+*/
 //----------------------------------------------------------------------------------------
           this.loginWithTwitter = function loginWithTwitter()
            {
