@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['firebase'])
+angular.module('starter.controllers', ['firebase', 'ngCordova'])
 
 //Dashboard page controller--------------------------------------------------------------------------
 .controller('DashboardCtrl', function($location)
@@ -15,17 +15,42 @@ angular.module('starter.controllers', ['firebase'])
 //Logs page controller-------------------------------------------------------------------------------
 .controller('LogsCtrl', function($scope, $cordovaSQLite )
 {
-  var example = angular.module('starter', ['ionic', 'ngCordova'])
-    .run(function($ionicPlatform, $cordovaSQLite)
+
+  $scope.save = function(newLog, newComment)
+  {
+    $cordovaSQLite.execute(db, 'INSERT INTO logs (newLog, newComment) VALUES (?,?)', [newLog], [newComment])
+        .then(function(result)
+        {
+            $scope.statusLog = "Log saved successful, cheers!";
+            $scope.statusComment = "Comment saved successful, cheers!";
+        },function(error)
+        {
+          $scope.statusLog  = "Error on saving: " + error.message;
+          $scope.statusComment  = "Error on saving: " + error.message;
+
+        })
+    }
+
+    $scope.load = function()
     {
-      $ionicPlatform.ready(function()
-      {
-          // Instantiate database file/connection after ionic platform is ready.
-          db = $cordovaSQLite.openDB({name:"logs.db", location:'default'});
-          $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS logs (log TEXT PRIMARY KEY AUTOINCREMENT, comment TEXT)');
-        })
-        })
-      })
+          // Execute SELECT statement to load message from database.
+          $cordovaSQLite.execute(db, 'SELECT * FROM logs')
+              .then(
+                  function(result)
+                  {
+                      if (result.rows.length > 0)
+                      {
+                          $scope.newMessage = result.rows.item(0).message;
+                          $scope.statusMessage = "Logs loaded successful, cheers!";
+                      }
+                  },
+                  function(error)
+                  {
+                      $scope.statusMessage = "Error on loading: " + error.message;
+                  });
+      }
+
+})
 
 //Calculator page controller--------------------------------------------------------------------------
 .controller('CalculatorCtrl', function($scope)

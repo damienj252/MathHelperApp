@@ -1,3 +1,5 @@
+var db = null;
+
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'firebase', 'ngCordova'])
 
 .constant('FirebaseUrl', 'https://ionicle.firebaseio.com/')
@@ -9,20 +11,34 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
 .config(ApplicationConfig);
 
-function ApplicationRun($ionicPlatform, $rootScope, $state)
+
+
+function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
 {
-  $ionicPlatform.ready(function() {
+  $ionicPlatform.ready(function()
+  {
 
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard)
     {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
+
     }
     if (window.StatusBar)
      {
 
       StatusBar.styleDefault();
     }
+          document.addEventListener('deviceready', function()
+          {
+              db = window.sqlitePlugin.openDatabase({name: 'logs.db', location: 'default'});
+
+              db = window.sqlitePlugin.openDB({ name: "logs.db", location: "default" });
+
+          // Instantiate database file/connection after ionic platform is ready.
+          db = window.sqlitePlugin.openDB({name:"logs.db", location: "default" });
+          window.sqlitePlugin.execute(db, 'CREATE TABLE IF NOT EXISTS Data (log TEXT PRIMARY KEY AUTOINCREMENT, comment TEXT)');
+          });
   });
 
   $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
@@ -97,59 +113,6 @@ function ApplicationConfig($stateProvider, $urlRouterProvider) {
     }
   })
 //Database ----------------------------------------------------------------------------------
-var db = null;
-
-var example = angular.module('starter', ['ionic', 'ngCordova'])
-  .run(function($ionicPlatform, $cordovaSQLite)
-  {
-    $ionicPlatform.ready(function()
-    {
-        // Instantiate database file/connection after ionic platform is ready.
-        db = $cordovaSQLite.openDB({name:"logs.db"/*, location:'default'}*/});
-        $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS logs (log TEXT PRIMARY KEY AUTOINCREMENT, comment TEXT)');
-
-    });
-})
-
-var example = angular.module('starter', ['ionic', 'ngCordova'])
-.run(function($ionicPlatform, $cordovaSQLite)
-{
-  $scope.save = function(newLog)
-  {
-    $cordovaSQLite.execute(db, 'INSERT INTO logs (log) VALUES (?)', [newLog])
-        .then(function(result)
-        {
-            $scope.statusMessage = "Message saved successful, cheers!";
-        }, function(error)
-        {
-            $scope.statusMessage = "Error on saving: " + error.message;
-        })
-
-      }
-})
-
-var example = angular.module('starter', ['ionic', 'ngCordova'])
-.run(function($ionicPlatform, $cordovaSQLite)
-{
-  $scope.load = function()
-  {
-        // Execute SELECT statement to load message from database.
-        $cordovaSQLite.execute(db, 'SELECT * FROM logs')
-            .then(
-                function(result)
-                {
-                    if (result.rows.length > 0) {
-                        $scope.newMessage = result.rows.item(0).message;
-                        $scope.statusMessage = "Logs loaded successful, cheers!";
-                    }
-                },
-                function(error)
-                {
-                    $scope.statusMessage = "Error on loading: " + error.message;
-                });
-    }
-  })
-
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');

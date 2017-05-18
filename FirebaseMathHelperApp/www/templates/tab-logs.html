@@ -12,12 +12,11 @@
             <input type="text" placeholder="Comment" ng-model="newComment">
         </label>
     </div>
-    <button class="button button-block button-calm" ng-click="save(newLog)" >Add</button>
+    <button class="button button-block button-calm" ng-click="save(newLog, newComment)" controller="LogsCtrl" >Add</button>
   </div>
 
-    <h4>New log added to your collection. Press add if the log below is correct:</h4>
-    <p>{{ newLog }}</p>
-    <p>{{ newComment }}</p>
+    <p>{{ statusLog }}</p>
+    <p>{{ statusComment }}</p>
 
 
 
