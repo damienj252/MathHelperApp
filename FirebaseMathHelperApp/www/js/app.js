@@ -33,11 +33,11 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
           {
               db = window.sqlitePlugin.openDatabase({name: 'logs.db', location: 'default'});
 
-              db = window.sqlitePlugin.openDB({ name: "logs.db", location: "default" });
+              db = window.sqlitePlugin.openDB({ name: "logs.db", location: 'default' });
 
           // Instantiate database file/connection after ionic platform is ready.
-          db = window.sqlitePlugin.openDB({name:"logs.db", location: "default" });
-          window.sqlitePlugin.execute(db, 'CREATE TABLE IF NOT EXISTS Data (log TEXT PRIMARY KEY AUTOINCREMENT, comment TEXT)');
+          db = window.sqlitePlugin.openDB({name:"logs.db"});
+          window.sqlitePlugin.execute(db, 'CREATE TABLE IF NOT EXISTS Data (newLog TEXT , newComment TEXT)');
           });
   });
 
@@ -52,12 +52,14 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
 
 ApplicationRun.$inject = ['$ionicPlatform', '$rootScope', '$state'];
 
-function AuthDataResolver(Auth) {
+function AuthDataResolver(Auth)
+{
   return Auth.$requireAuth();
 }
 AuthDataResolver.$inject = ['Auth'];
 
-function ApplicationConfig($stateProvider, $urlRouterProvider) {
+function ApplicationConfig($stateProvider, $urlRouterProvider)
+{
 
   $stateProvider
 
@@ -112,8 +114,6 @@ function ApplicationConfig($stateProvider, $urlRouterProvider) {
       }
     }
   })
-//Database ----------------------------------------------------------------------------------
-
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
 

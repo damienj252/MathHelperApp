@@ -15,10 +15,9 @@ angular.module('starter.controllers', ['firebase', 'ngCordova'])
 //Logs page controller-------------------------------------------------------------------------------
 .controller('LogsCtrl', function($scope, $cordovaSQLite )
 {
-
   $scope.save = function(newLog, newComment)
   {
-    $cordovaSQLite.execute(db, 'INSERT INTO logs (newLog, newComment) VALUES (?,?)', [newLog], [newComment])
+    $cordovaSQLite.execute(db, 'INSERT INTO Data1(newLog, newComment) VALUES (?,?)', [newLog], [newComment])
         .then(function(result)
         {
             $scope.statusLog = "Log saved successful, cheers!";
