@@ -114,8 +114,21 @@ var example = angular.module('starter', ['ionic', 'ngCordova'])
 
 example.controller("LogsCtrl", function($scope, $cordovaSQLite)
 {
+  function initDB()
+  {
 
-      $scope.insert = function(firstname, lastname)
+			  db = $cordovaSQLite.openDB("logs.db");
+
+			   var query = "CREATE TABLE IF NOT EXISTS logs_table (log string, comment string)";
+			    runQuery(query,[],function(res) {
+			      console.log("table created ");
+			    }, function (err) {
+			      console.log(err);
+			    });
+
+		}
+
+      $scope.insert = function(log, comment)
       {
           var query = "INSERT INTO logs (log, comment) VALUES (?,?)";
           $cordovaSQLite.execute(db, query, [log, comment]).then(function(res) {
@@ -125,7 +138,7 @@ example.controller("LogsCtrl", function($scope, $cordovaSQLite)
           });
       }
 
-        $scope.select = function(lastname)
+        $scope.select = function(comment)
         {
             var query = "SELECT log, comment FROM log WHERE comment = ?";
             $cordovaSQLite.execute(db, query, [comment]).then(function(res)
@@ -143,8 +156,33 @@ example.controller("LogsCtrl", function($scope, $cordovaSQLite)
                 console.error(err);
             });
         }
-      })
 
+//----------------------------------------------------------------------------------------------------
+    $scope.selectAll = function()
+    {
+
+    var query = "SELECT * FROM logs";
+    $cordovaSQLite.execute(db, query, []).then(function(res) {
+
+        if(res.rows.length > 0) {
+          console.log("SELECTED -> " + res.rows.item(0).log + " " + res.rows.item(0).comment);
+             for (var i=0; i<res.rows.length; i++) {
+
+                $scope.allSessions.push({
+                    log: res.rows.item(i).log,
+                    comment: res.rows.item(i).comment,
+                    });
+
+             }
+        } else {
+            console.log("No results found");
+        }
+    }, function (err) {
+        console.error("error=>"+err);
+    });
+}
+
+})
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
 
