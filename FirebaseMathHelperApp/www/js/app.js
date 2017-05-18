@@ -29,17 +29,52 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
 
       StatusBar.styleDefault();
     }
-          document.addEventListener('deviceready', function()
-          {
-              db = window.sqlitePlugin.openDatabase({name: 'logs.db', location: 'default'});
+              db = $cordovaSQLite.openDatabase({name: 'logs.db', location: 'default'});
 
-              db = window.sqlitePlugin.openDB({ name: "logs.db", location: 'default' });
+              db = $cordovaSQLite.openDB({ name: "logs.db", location: 'default' });
 
           // Instantiate database file/connection after ionic platform is ready.
-          db = window.sqlitePlugin.openDB({name:"logs.db"});
-          window.sqlitePlugin.execute(db, 'CREATE TABLE IF NOT EXISTS Data (newLog TEXT , newComment TEXT)');
-          });
-  });
+          db = $cordovaSQLite.openDB({name:"logs.db"});
+          $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS Data (newLog TEXT , newComment TEXT)');
+
+          $scope.save = function(newLog, newComment)
+          {
+            $cordovaSQLite.execute(db, 'INSERT INTO Data(newLog, newComment) VALUES (?,?)', [newLog], [newComment])
+                .then(function(result)
+                {
+                    $scope.statusLog = "Log saved successful, cheers!";
+                    $scope.statusComment = "Comment saved successful, cheers!";
+                },function(error)
+                {
+                  $scope.statusLog  = "Error on saving: " + error.message;
+                  $scope.statusComment  = "Error on saving: " + error.message;
+
+                })
+            }
+
+            $scope.load = function()
+            {
+                  // Execute SELECT statement to load message from database.
+                  $cordovaSQLite.execute(db, 'SELECT * FROM logs')
+                      .then(
+                          function(result)
+                          {
+                              if (result.rows.length > 0)
+                              {
+                                  $scope.newLog = result.rows.item(0).log;
+                                  $scope.statusLog = "Logs loaded successful, cheers!";
+
+                                  $scope.newComment = result.rows.item(0).comment;
+                                  $scope.statusComment = "Logs loaded successful, cheers!";
+                              }
+                          },
+                          function(error)
+                          {
+                            $scope.statusLog  = "Error on saving: " + error.message;
+                            $scope.statusComment  = "Error on saving: " + error.message;
+                          });
+              }
+          }); 
 
   $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
     // We can catch the error thrown when the $requireAuth promise is rejected
@@ -114,6 +149,12 @@ function ApplicationConfig($stateProvider, $urlRouterProvider)
       }
     }
   })
+//-------------------------------------------------------------------------------------------
+/*var example = angular.module('starter', ['ionic', 'ngCordova'])
+  .run(function($ionicPlatform, $cordovaSQLite)
+{
+
+})*/
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
 
