@@ -6,6 +6,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
 .run(ApplicationRun)
 
+
 .config(ApplicationConfig);
 
 function ApplicationRun($ionicPlatform, $rootScope, $state)
@@ -99,90 +100,57 @@ function ApplicationConfig($stateProvider, $urlRouterProvider) {
 var db = null;
 
 var example = angular.module('starter', ['ionic', 'ngCordova'])
-  .run(function($ionicPlatform, $cordovaSQLite) {
-      $ionicPlatform.ready(function() {
-          if(window.cordova && window.cordova.plugins.Keyboard) {
-              cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-          }
-          if(window.StatusBar) {
-              StatusBar.styleDefault();
-          }
-          db = $cordovaSQLite.openDB("logs.db");
-          $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS logs (log text, comment text)");
-      });
-  });
-
-example.controller("LogsCtrl", function($scope, $cordovaSQLite)
-{
-  function initDB()
+  .run(function($ionicPlatform, $cordovaSQLite)
   {
-
-			  db = $cordovaSQLite.openDB("logs.db");
-
-			   var query = "CREATE TABLE IF NOT EXISTS logs_table (log string, comment string)";
-			    runQuery(query,[],function(res) {
-			      console.log("table created ");
-			    }, function (err) {
-			      console.log(err);
-			    });
-
-		}
-
-      $scope.insert = function(log, comment)
-      {
-          var query = "INSERT INTO logs (log, comment) VALUES (?,?)";
-          $cordovaSQLite.execute(db, query, [log, comment]).then(function(res) {
-              console.log("INSERT LOG -> " + res.insertLog);
-          }, function (err) {
-              console.error(err);
-          });
-      }
-
-        $scope.select = function(comment)
-        {
-            var query = "SELECT log, comment FROM log WHERE comment = ?";
-            $cordovaSQLite.execute(db, query, [comment]).then(function(res)
-            {
-                if(res.rows.length > 0)
-                 {
-                    console.log("SELECTED -> " + res.rows.item(0).log + " " + res.rows.item(0).comment);
-                }
-                else
-                {
-                    console.log("No results found");
-                }
-            }, function (err)
-            {
-                console.error(err);
-            });
-        }
-
-//----------------------------------------------------------------------------------------------------
-    $scope.selectAll = function()
+    $ionicPlatform.ready(function()
     {
+        // Instantiate database file/connection after ionic platform is ready.
+        db = $cordovaSQLite.openDB({name:"logs.db"/*, location:'default'}*/});
+        $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS logs (log TEXT PRIMARY KEY AUTOINCREMENT, comment TEXT)');
 
-    var query = "SELECT * FROM logs";
-    $cordovaSQLite.execute(db, query, []).then(function(res) {
-
-        if(res.rows.length > 0) {
-          console.log("SELECTED -> " + res.rows.item(0).log + " " + res.rows.item(0).comment);
-             for (var i=0; i<res.rows.length; i++) {
-
-                $scope.allSessions.push({
-                    log: res.rows.item(i).log,
-                    comment: res.rows.item(i).comment,
-                    });
-
-             }
-        } else {
-            console.log("No results found");
-        }
-    }, function (err) {
-        console.error("error=>"+err);
     });
-}
-
 })
+
+var example = angular.module('starter', ['ionic', 'ngCordova'])
+.run(function($ionicPlatform, $cordovaSQLite)
+{
+  $scope.save = function(newLog)
+  {
+    $cordovaSQLite.execute(db, 'INSERT INTO logs (log) VALUES (?)', [newLog])
+        .then(function(result)
+        {
+            $scope.statusMessage = "Message saved successful, cheers!";
+        }, function(error)
+        {
+            $scope.statusMessage = "Error on saving: " + error.message;
+        })
+
+      }
+})
+
+var example = angular.module('starter', ['ionic', 'ngCordova'])
+.run(function($ionicPlatform, $cordovaSQLite)
+{
+  $scope.load = function()
+  {
+        // Execute SELECT statement to load message from database.
+        $cordovaSQLite.execute(db, 'SELECT * FROM logs')
+            .then(
+                function(result)
+                {
+                    if (result.rows.length > 0) {
+                        $scope.newMessage = result.rows.item(0).message;
+                        $scope.statusMessage = "Logs loaded successful, cheers!";
+                    }
+                },
+                function(error)
+                {
+                    $scope.statusMessage = "Error on loading: " + error.message;
+                });
+    }
+  })
+
+
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
 

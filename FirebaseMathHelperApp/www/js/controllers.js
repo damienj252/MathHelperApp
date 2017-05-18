@@ -15,28 +15,17 @@ angular.module('starter.controllers', ['firebase'])
 //Logs page controller-------------------------------------------------------------------------------
 .controller('LogsCtrl', function($scope, $cordovaSQLite )
 {
-  $scope.insert = function(log, comment) {
-       var query = "INSERT INTO logs (log, comment) VALUES (?,?)";
-       $cordovaSQLite.execute(db, query, [log, comment]).then(function(res) {
-           console.log("INSERT LOG -> " + res.insertLOG);
-       }, function (err) {
-           console.error(err);
-       });
-   }
-
-   $scope.select = function(comment) {
-       var query = "SELECT log, comment FROM logs WHERE log = ?";
-       $cordovaSQLite.execute(db, query, [comment]).then(function(res) {
-           if(res.rows.length > 0) {
-               console.log("SELECTED -> " + res.rows.item(0).log + " " + res.rows.item(0).comment);
-           } else {
-               console.log("No results found");
-           }
-       }, function (err) {
-           console.error(err);
-       });
-   }
-})
+  var example = angular.module('starter', ['ionic', 'ngCordova'])
+    .run(function($ionicPlatform, $cordovaSQLite)
+    {
+      $ionicPlatform.ready(function()
+      {
+          // Instantiate database file/connection after ionic platform is ready.
+          db = $cordovaSQLite.openDB({name:"logs.db", location:'default'});
+          $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS logs (log TEXT PRIMARY KEY AUTOINCREMENT, comment TEXT)');
+        })
+        })
+      })
 
 //Calculator page controller--------------------------------------------------------------------------
 .controller('CalculatorCtrl', function($scope)
