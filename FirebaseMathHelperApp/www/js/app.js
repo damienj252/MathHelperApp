@@ -12,7 +12,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 .config(ApplicationConfig);
 
 
-
+//ApplicationRun-----------------------------------------------------------------------------
 function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
 {
   $ionicPlatform.ready(function()
@@ -23,58 +23,70 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
 
-    }
+    }//if
     if (window.StatusBar)
-     {
+    {
 
       StatusBar.styleDefault();
-    }
-              db = $cordovaSQLite.openDatabase({name: 'logs.db', location: 'default'});
+    }//if
 
-              db = $cordovaSQLite.openDB({ name: "logs.db", location: 'default' });
+      //window.sqlitePlugin.openDB({name: 'logs.db', location: 'default'});
 
-          // Instantiate database file/connection after ionic platform is ready.
-          db = $cordovaSQLite.openDB({name:"logs.db"});
-          $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS Data (newLog TEXT , newComment TEXT)');
+    //  var db = $cordovaSQLite.openDatabase({name: 'logs.db', iosDatabaseLocation: 'Library'}, successcb, errorcb);
 
-          $scope.save = function(newLog, newComment)
-          {
-            $cordovaSQLite.execute(db, 'INSERT INTO Data(newLog, newComment) VALUES (?,?)', [newLog], [newComment])
-                .then(function(result)
-                {
-                    $scope.statusLog = "Log saved successful, cheers!";
-                    $scope.statusComment = "Comment saved successful, cheers!";
-                },function(error)
-                {
-                  $scope.statusLog  = "Error on saving: " + error.message;
-                  $scope.statusComment  = "Error on saving: " + error.message;
 
-                })
-            }
+      window.openDatabase = function(logs, ignored1, ignored2, ignored3)
+      {
+        return window.sqlitePlugin.openDatabase({name: 'logs.db', location: 'default'})
+      };
+      //var db = $cordovaSQLite.openDatabase({ name: 'logs.db', location: 1, successcb, errorcb });s
 
-            $scope.load = function()
+
+    //  var db = $cordovaSQLite.openDatabase({ name: 'logs.db', location: 1, successcb, errorcb });
+
+      // Instantiate database file/connection after ionic platform is ready.
+      db = $cordovaSQLite.openDatabase({name:"logs.db"});
+      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS Data (newLog TEXT , newComment TEXT)');
+
+
+      $scope.save = function(newLog, newComment)
+      {
+        $cordovaSQLite.execute(db, 'INSERT INTO Data(newLog, newComment) VALUES (?,?)', [newLog], [newComment])
+            .then(function(result)
             {
-                  // Execute SELECT statement to load message from database.
-                  $cordovaSQLite.execute(db, 'SELECT * FROM logs')
-                      .then(
-                          function(result)
-                          {
-                              if (result.rows.length > 0)
-                              {
-                                  $scope.newLog = result.rows.item(0).log;
-                                  $scope.statusLog = "Logs loaded successful, cheers!";
+                $scope.statusLog = "Log saved successful, cheers!";
+                $scope.statusComment = "Comment saved successful, cheers!";
+            },function(error)
+            {
+              $scope.statusLog  = "Error on saving: " + error.message;
+              $scope.statusComment  = "Error on saving: " + error.message;
+            })
+        }//end of the save function
 
-                                  $scope.newComment = result.rows.item(0).comment;
-                                  $scope.statusComment = "Logs loaded successful, cheers!";
-                              }
-                          },
-                          function(error)
+        $scope.load = function()
+        {
+              // Execute SELECT statement to load message from database.
+              $cordovaSQLite.execute(db, 'SELECT * FROM logs')
+                  .then(
+                      function(result)
+                      {
+                          if (result.rows.length > 0)
                           {
-                            $scope.statusLog  = "Error on saving: " + error.message;
-                            $scope.statusComment  = "Error on saving: " + error.message;
-                          });
-              }
-          }); 
+                              $scope.newLog = result.rows.item(0).log;
+                              $scope.statusLog = "Logs loaded successful, cheers!";
+
+                              $scope.newComment = result.rows.item(0).comment;
+                              $scope.statusComment = "Logs loaded successful, cheers!";
+                          }
+                      },
+                      function(error)
+                      {
+                        $scope.statusLog  = "Error on saving: " + error.message;
+                        $scope.statusComment  = "Error on saving: " + error.message;
+                      });
+          }//load function
+
+  });//end of the ready function
 
   $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
     // We can catch the error thrown when the $requireAuth promise is rejected
@@ -83,7 +95,7 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
       $state.go('login');
     }
   });
-}
+}//ApplicationRun---------------------------------------------------------------------------------------------------
 
 ApplicationRun.$inject = ['$ionicPlatform', '$rootScope', '$state'];
 
