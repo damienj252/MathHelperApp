@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 angular.module('starter.controllers', ['firebase', 'ngCordova'])
 
 //Dashboard page controller--------------------------------------------------------------------------
 .controller('DashboardCtrl', function($location)
 {
+=======
+angular.module('starter.controllers', ['firebase'])
+
+//Dashboard page controller--------------------------------------------------------------------------
+.controller('DashboardCtrl', function($location)
+  {
+>>>>>>> 5fcc7c8c3256e2de8925f9e93b99c57668c6682b
     /*
     $scope.logout = function()
     {
@@ -15,6 +23,7 @@ angular.module('starter.controllers', ['firebase', 'ngCordova'])
 //Logs page controller-------------------------------------------------------------------------------
 .controller('LogsCtrl', function($scope, $cordovaSQLite )
 {
+<<<<<<< HEAD
 
   $scope.save = function(newLog, newComment)
   {
@@ -54,6 +63,29 @@ angular.module('starter.controllers', ['firebase', 'ngCordova'])
                   });
       }
 
+=======
+  $scope.insert = function(log, comment) {
+       var query = "INSERT INTO logs (log, comment) VALUES (?,?)";
+       $cordovaSQLite.execute(db, query, [log, comment]).then(function(res) {
+           console.log("INSERT LOG -> " + res.insertLOG);
+       }, function (err) {
+           console.error(err);
+       });
+   }
+
+   $scope.select = function(comment) {
+       var query = "SELECT log, comment FROM logs WHERE log = ?";
+       $cordovaSQLite.execute(db, query, [comment]).then(function(res) {
+           if(res.rows.length > 0) {
+               console.log("SELECTED -> " + res.rows.item(0).log + " " + res.rows.item(0).comment);
+           } else {
+               console.log("No results found");
+           }
+       }, function (err) {
+           console.error(err);
+       });
+   }
+>>>>>>> 5fcc7c8c3256e2de8925f9e93b99c57668c6682b
 })
 
 //Calculator page controller--------------------------------------------------------------------------
@@ -89,6 +121,7 @@ angular.module('starter.controllers', ['firebase', 'ngCordova'])
 .controller('LoginCtrl', function(Auth, $state)
 {
 
+<<<<<<< HEAD
   this.loginWithGoogle = function loginWithGoogle()
    {
     Auth.$authWithOAuthPopup('google')
@@ -142,3 +175,13 @@ this.loginWithFacebook = function loginWithFacebook()
             }
   });
 //LoginCtrl.$inject = ['Auth', '$state'];
+=======
+  this.loginWithGoogle = function loginWithGoogle() {
+    Auth.$authWithOAuthPopup('google')
+      .then(function(authData) {
+        $state.go('tab.dashboard');
+      });
+  };
+//LoginCtrl.$inject = ['Auth', '$state'];
+})
+>>>>>>> 5fcc7c8c3256e2de8925f9e93b99c57668c6682b

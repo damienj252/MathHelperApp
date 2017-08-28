@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<<<<<<< HEAD
 <widget id="com.ionicframework.firebasemathhelperapp590200" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>FirebaseMathHelperApp</name>
   <description>An awesome Ionic/Cordova app.</description>
@@ -46,6 +47,30 @@
   <platform name="ios">
     <allow-intent href="itms:*"/>
     <allow-intent href="itms-apps:*"/>
+=======
+<widget id="com.ionicframework.mathhelperapp258171" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>MathHelperApp</name>
+  <description>
+        An Ionic Framework and Cordova project.
+    </description>
+  <author email="you@example.com" href="http://example.com/">
+      Your Name Here
+    </author>
+  <content src="index.html"/>
+  <access origin="*"/>
+  <preference name="webviewbounce" value="false"/>
+  <preference name="UIWebViewBounce" value="false"/>
+  <preference name="DisallowOverscroll" value="true"/>
+  <preference name="SplashScreenDelay" value="2000"/>
+  <preference name="FadeSplashScreenDuration" value="2000"/>
+  <preference name="android-minSdkVersion" value="16"/>
+  <preference name="BackupWebStorage" value="none"/>
+  <preference name="SplashScreen" value="screen"/>
+  <feature name="StatusBar">
+    <param name="ios-package" value="CDVStatusBar" onload="true"/>
+  </feature>
+  <platform name="ios">
+>>>>>>> 5fcc7c8c3256e2de8925f9e93b99c57668c6682b
     <icon src="resources/ios/icon/icon.png" width="57" height="57"/>
     <icon src="resources/ios/icon/icon@2x.png" width="114" height="114"/>
     <icon src="resources/ios/icon/icon-40.png" width="40" height="40"/>
@@ -64,6 +89,7 @@
     <icon src="resources/ios/icon/icon-small.png" width="29" height="29"/>
     <icon src="resources/ios/icon/icon-small@2x.png" width="58" height="58"/>
     <icon src="resources/ios/icon/icon-small@3x.png" width="87" height="87"/>
+<<<<<<< HEAD
     <splash src="resources/ios/splash/Default-568h@2x~iphone.png" width="640" height="1136"/>
     <splash src="resources/ios/splash/Default-667h.png" width="750" height="1334"/>
     <splash src="resources/ios/splash/Default-736h.png" width="1242" height="2208"/>
@@ -84,3 +110,19 @@
   <plugin name="cordova-plugin-device" spec="1.1.4"/>
   <plugin name="cordova-plugin-splashscreen" spec="~4.0.1"/>
 </widget>
+=======
+    <splash src="resources/ios/splash/Default-568h@2x~iphone.png" height="1136" width="640"/>
+    <splash src="resources/ios/splash/Default-667h.png" height="1334" width="750"/>
+    <splash src="resources/ios/splash/Default-736h.png" height="2208" width="1242"/>
+    <splash src="resources/ios/splash/Default-Landscape-736h.png" height="1242" width="2208"/>
+    <splash src="resources/ios/splash/Default-Landscape@2x~ipad.png" height="1536" width="2048"/>
+    <splash src="resources/ios/splash/Default-Landscape@~ipadpro.png" height="2048" width="2732"/>
+    <splash src="resources/ios/splash/Default-Landscape~ipad.png" height="768" width="1024"/>
+    <splash src="resources/ios/splash/Default-Portrait@2x~ipad.png" height="2048" width="1536"/>
+    <splash src="resources/ios/splash/Default-Portrait@~ipadpro.png" height="2732" width="2048"/>
+    <splash src="resources/ios/splash/Default-Portrait~ipad.png" height="1024" width="768"/>
+    <splash src="resources/ios/splash/Default@2x~iphone.png" height="960" width="640"/>
+    <splash src="resources/ios/splash/Default~iphone.png" height="480" width="320"/>
+  </platform>
+</widget>
+>>>>>>> 5fcc7c8c3256e2de8925f9e93b99c57668c6682b
