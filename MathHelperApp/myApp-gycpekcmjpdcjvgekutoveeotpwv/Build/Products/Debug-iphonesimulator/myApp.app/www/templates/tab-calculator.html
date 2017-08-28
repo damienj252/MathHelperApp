@@ -1,0 +1,48 @@
+<ion-view view-title="Calculator">
+  <ion-content scroll = "false" class = "fill-height">
+
+    <div class="card">
+        <div class="item">
+          <div class="horizontal display">
+              <input ng-model="screen" id="displayPanel" type="text" value="0"/>
+          </div>
+            <br />
+
+            <div class="button-bar">
+                <a class="button button-medium button-positive" ng-click="seven()" id="key7" data-rnc-tag="7" class="key">7</a>
+                <a class="button button-medium button-positive" ng-click="eigth()" id="key8" data-rnc-tag="8" class="key">8</a>
+                <a class="button button-medium button-positive" ng-click="nine()" id="key9" data-rnc-tag="9" class="key">9</a>
+                <a class="button button-medium button-light" ng-click="plus()" id="keyAdd" class="key operation-key">+</a>
+            </div>
+
+            <div class="button-bar">
+                <a class="button button-medium button-positive" ng-click="four()" id="key4" data-rnc-tag="4" class="key">4</a>
+                <a class="button button-medium button-positive" ng-click="five()" id="key5" data-rnc-tag="5" class="key">5</a>
+                <a class="button button-medium button-positive" ng-click="six()" id="key6" data-rnc-tag="6" class="key">6</a>
+                <a class="button button-medium button-light" ng-click="minus()"  id="keySubtract" class="key operation-key">-</a>
+            </div>
+
+            <div class="button-bar">
+                <a class="button button-medium button-positive" ng-click="three()"  id="key3" data-rnc-tag="3" class="key">3</a>
+                <a class="button button-medium button-positive" ng-click="two()"  id="key2" data-rnc-tag="2" class="key">2</a>
+                <a class="button button-medium button-positive" ng-click="one()"  id="key1" data-rnc-tag="1" class="key">1</a>
+                <a class="button button-medium button-light" ng-click="multiply()"  id="keyMultiply" class="key operation-key">X</a>
+
+            </div>
+
+            <div class="button-bar">
+                <a class="button button-medium button-light" ng-click="clear()" id="keyC" data-rnc-tag="C" class="key control-key">C</a>
+                <a class="button button-medium button-positive" ng-click="zero()" id="keyPlusMinus" class="key control-key">0</a>
+                <a class="button button-medium button-light" ng-click="equal()" id="keyPercent" class="key control-key">=</a>
+                <a class="button button-medium button-light" ng-click="divide()" id="keyDivide" class="key operation-key">/</a>
+
+            </div>
+
+            <div class="button-bar">
+            </div>
+
+            </div>
+      </div>
+
+  </ion-content>
+</ion-view>
