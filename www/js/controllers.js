@@ -1,22 +1,8 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 995b4fd6e5f4d764ad47a09eed5134712ebd59c8
 angular.module('starter.controllers', ['firebase', 'ngCordova'])
 
 //Dashboard page controller--------------------------------------------------------------------------
 .controller('DashboardCtrl', function($location)
 {
-<<<<<<< HEAD
-=======
-=======
-angular.module('starter.controllers', ['firebase'])
-
-//Dashboard page controller--------------------------------------------------------------------------
-.controller('DashboardCtrl', function($location)
-  {
->>>>>>> 5fcc7c8c3256e2de8925f9e93b99c57668c6682b
->>>>>>> 995b4fd6e5f4d764ad47a09eed5134712ebd59c8
     /*
     $scope.logout = function()
     {
@@ -29,10 +15,6 @@ angular.module('starter.controllers', ['firebase'])
 //Logs page controller-------------------------------------------------------------------------------
 .controller('LogsCtrl', function($scope, $cordovaSQLite )
 {
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 995b4fd6e5f4d764ad47a09eed5134712ebd59c8
 
   $scope.save = function(newLog, newComment)
   {
@@ -72,32 +54,6 @@ angular.module('starter.controllers', ['firebase'])
                   });
       }
 
-<<<<<<< HEAD
-=======
-=======
-  $scope.insert = function(log, comment) {
-       var query = "INSERT INTO logs (log, comment) VALUES (?,?)";
-       $cordovaSQLite.execute(db, query, [log, comment]).then(function(res) {
-           console.log("INSERT LOG -> " + res.insertLOG);
-       }, function (err) {
-           console.error(err);
-       });
-   }
-
-   $scope.select = function(comment) {
-       var query = "SELECT log, comment FROM logs WHERE log = ?";
-       $cordovaSQLite.execute(db, query, [comment]).then(function(res) {
-           if(res.rows.length > 0) {
-               console.log("SELECTED -> " + res.rows.item(0).log + " " + res.rows.item(0).comment);
-           } else {
-               console.log("No results found");
-           }
-       }, function (err) {
-           console.error(err);
-       });
-   }
->>>>>>> 5fcc7c8c3256e2de8925f9e93b99c57668c6682b
->>>>>>> 995b4fd6e5f4d764ad47a09eed5134712ebd59c8
 })
 
 //Calculator page controller--------------------------------------------------------------------------
@@ -133,10 +89,6 @@ angular.module('starter.controllers', ['firebase'])
 .controller('LoginCtrl', function(Auth, $state)
 {
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 995b4fd6e5f4d764ad47a09eed5134712ebd59c8
   this.loginWithGoogle = function loginWithGoogle()
    {
     Auth.$authWithOAuthPopup('google')
@@ -156,11 +108,9 @@ this.loginWithFacebook = function loginWithFacebook()
       if (response.status === 'connected')
       {
           console.log('Facebook login succeeded', response);
-
           var credential = firebase.auth.FacebookAuthProvider.credential
           (
               response.authResponse.accessToken);
-
           firebase.auth().signInWithCredential(credential).catch(function (error)
           {
               // Handle Errors here.
@@ -171,7 +121,6 @@ this.loginWithFacebook = function loginWithFacebook()
               // The firebase.auth.AuthCredential type that was used.
               var credential = error.credential;
           });
-
       } else
       {
           alert('Facebook login failed');
@@ -190,16 +139,3 @@ this.loginWithFacebook = function loginWithFacebook()
             }
   });
 //LoginCtrl.$inject = ['Auth', '$state'];
-<<<<<<< HEAD
-=======
-=======
-  this.loginWithGoogle = function loginWithGoogle() {
-    Auth.$authWithOAuthPopup('google')
-      .then(function(authData) {
-        $state.go('tab.dashboard');
-      });
-  };
-//LoginCtrl.$inject = ['Auth', '$state'];
-})
->>>>>>> 5fcc7c8c3256e2de8925f9e93b99c57668c6682b
->>>>>>> 995b4fd6e5f4d764ad47a09eed5134712ebd59c8
