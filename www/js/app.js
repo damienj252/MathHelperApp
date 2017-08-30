@@ -1,4 +1,4 @@
-var db = null;
+var db;
 
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'firebase', 'ngCordova'])
 
@@ -17,32 +17,32 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
 {
   $ionicPlatform.ready(function()
   {
+    console.log('ready');
 
-    if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard)
+    if (window.cordova && window.cordova.plugins.Keyboard)
     {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);
-
-    }//if
+        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    }
     if (window.StatusBar)
     {
+        StatusBar.styleDefault();
+    }
 
-      StatusBar.styleDefault();
-    }//if
+          // Important!!
+          //
+          // Instantiate database file/connection after ionic platform is ready.
+          //
+          try {
+              db = $cordovaSQLite.openDB({name:"logs.db",location:'default'});
+          }
+          catch (error)
+          {
+              alert(error);
+          }
 
-      //window.sqlitePlugin.openDB({name: 'logs.db', location: 'default'});
-
-    //  var db = $cordovaSQLite.openDatabase({name: 'logs.db', iosDatabaseLocation: 'Library'}, successcb, errorcb);
+          $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS Messages (log TEXT, comment TEXT)');
 
 
-      window.openDatabase = function(logs, ignored1, ignored2, ignored3)
-      {
-        return window.sqlitePlugin.openDatabase({name: 'logs.db', location: 'default'})
-      };
-      //var db = $cordovaSQLite.openDatabase({ name: 'logs.db', location: 1, successcb, errorcb });s
-
-
-    //  var db = $cordovaSQLite.openDatabase({ name: 'logs.db', location: 1, successcb, errorcb });
 
       // Instantiate database file/connection after ionic platform is ready.
       db = $cordovaSQLite.openDatabase({name:"logs.db"});
@@ -73,10 +73,10 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
                           if (result.rows.length > 0)
                           {
                               $scope.newLog = result.rows.item(0).log;
-                              $scope.statusLog = "Logs loaded successful, cheers!";
+                              $scope.statusLog = "Logs loaded successful";
 
                               $scope.newComment = result.rows.item(0).comment;
-                              $scope.statusComment = "Logs loaded successful, cheers!";
+                              $scope.statusComment = "Logs loaded successful";
                           }
                       },
                       function(error)

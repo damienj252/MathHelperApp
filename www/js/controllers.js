@@ -18,17 +18,13 @@ angular.module('starter.controllers', ['firebase', 'ngCordova'])
 
   $scope.save = function(newLog, newComment)
   {
-    $cordovaSQLite.execute(db, 'INSERT INTO Data(newLog, newComment) VALUES (?,?)', [newLog], [newComment])
-        .then(function(result)
-        {
-            $scope.statusLog = "Log saved successful, cheers!";
-            $scope.statusComment = "Comment saved successful, cheers!";
-        },function(error)
-        {
-          $scope.statusLog  = "Error on saving: " + error.message;
-          $scope.statusComment  = "Error on saving: " + error.message;
-
-        })
+    // execute INSERT statement with parameter
+       $cordovaSQLite.execute(db, 'INSERT INTO logs (log) VALUES (?)', [newLog])
+           .then(function(result) {
+               $scope.statusMessage = "Log saved successful, cheers!";
+           }, function(error) {
+               $scope.statusMessage = "Error on saving: " + error.message;
+           })
     }
 
     $scope.load = function()
