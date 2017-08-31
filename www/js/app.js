@@ -28,21 +28,16 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
         StatusBar.styleDefault();
     }
 
-          // Important!!
-          //
-          // Instantiate database file/connection after ionic platform is ready.
-          //
-          try {
-              db = $cordovaSQLite.openDB({name:"logs.db",location:'default'});
-          }
-          catch (error)
-          {
-              alert(error);
-          }
+      try
+      {
+          db = $cordovaSQLite.openDB({name:"logs.db",location:'default'});
+      }
+      catch (error)
+      {
+          alert(error);
+      }
 
-          $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS Messages (log TEXT, comment TEXT)');
-
-
+      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS Messages (log TEXT, comment TEXT)');
 
       // Instantiate database file/connection after ionic platform is ready.
       db = $cordovaSQLite.openDatabase({name:"logs.db"});
@@ -66,24 +61,22 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
         $scope.load = function()
         {
               // Execute SELECT statement to load message from database.
-              $cordovaSQLite.execute(db, 'SELECT * FROM logs')
-                  .then(
-                      function(result)
-                      {
-                          if (result.rows.length > 0)
-                          {
-                              $scope.newLog = result.rows.item(0).log;
-                              $scope.statusLog = "Logs loaded successful";
+              $cordovaSQLite.execute(db, 'SELECT * FROM LOGS ORDER BY log DESC')
+            .then(
+                function(res) {
 
-                              $scope.newComment = result.rows.item(0).comment;
-                              $scope.statusComment = "Logs loaded successful";
-                          }
-                      },
-                      function(error)
-                      {
-                        $scope.statusLog  = "Error on saving: " + error.message;
-                        $scope.statusComment  = "Error on saving: " + error.message;
-                      });
+                    if (res.rows.length > 0) {
+
+                        $scope.newLog = res.rows.item(0).logs;
+                        $scope.newComment = res.rows.item(0).comment;
+                        $scope.statusLog = "Logs loaded successful, cheers!";
+                        $scope.statusComment = "Logs loaded successful, cheers!";
+                    }
+                },
+                function(error) {
+                    $scope.statusMessage = "Error on loading: " + error.message;
+                }
+            );
           }//load function
 
   });//end of the ready function

@@ -3,7 +3,7 @@ angular.module('starter.config', [])
     name: 'logs.db',
     tables: [
       {
-            name: 'logs',
+            name: 'LOGS',
             columns: [
                 {name: 'newLog', type: 'text'},
                 {name: 'newComment', type: 'text'},
