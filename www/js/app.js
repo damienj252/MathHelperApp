@@ -1,10 +1,10 @@
-var db;
+
 
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'firebase', 'ngCordova'])
 
 .constant('FirebaseUrl', 'https://ionicle.firebaseio.com/')
 
-.service('rootRef', ['FirebaseUrl', Firebase])
+.service('rootRef', ['FirebaseUrl', Firebase], '$cordovaSQLite')
 
 .run(ApplicationRun)
 
@@ -15,29 +15,42 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 //ApplicationRun-----------------------------------------------------------------------------
 function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
 {
-  $ionicPlatform.ready(function()
+  $ionicPlatform.ready(function($scope, $stateParams,$cordovaSQLite)
   {
     console.log('ready');
+
+    var db = null;
+
+    function setDB()
+    {
+      db = null;
+    }//setDB
+      setTimeout(setDB, 10);
+      console.log('Got a db variable! %s', db);
 
     if (window.cordova && window.cordova.plugins.Keyboard)
     {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-    }
+    }//if
     if (window.StatusBar)
     {
         StatusBar.styleDefault();
-    }
+    }//if
 
       try
       {
           db = $cordovaSQLite.openDB({name:"logs.db",location:'default'});
-      }
+          var db = window.sqlitePlugin.openDatabase({name: 'my.db', iosDatabaseLocation: 'Library'});
+          console.log('Open the database');
+      }//try
       catch (error)
       {
           alert(error);
-      }
+      }//catch
 
-      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS Messages (log TEXT, comment TEXT)');
+
+      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS DOCUMENT (log TEXT, comment TEXT)');
+      console.log('Creates the database');
 
       // Instantiate database file/connection after ionic platform is ready.
       db = $cordovaSQLite.openDatabase({name:"logs.db"});

@@ -19,7 +19,7 @@ angular.module('starter.controllers', ['firebase', 'ngCordova'])
   $scope.save = function(newLog, newComment)
   {
     // execute INSERT statement with parameter
-       $cordovaSQLite.execute(db, 'INSERT INTO logs (log) VALUES (?)', [newLog])
+       $cordovaSQLite.execute(db, 'INSERT INTO DOCUMENT (log) VALUES (?)', [newLog])
            .then(function(result) {
                $scope.statusMessage = "Log saved successful, cheers!";
            }, function(error) {
