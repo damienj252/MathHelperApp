@@ -1,4 +1,4 @@
-angular.module('starter.config', [])
+angular.module('starter.config','ngCordova', [])
 .constant('DB_CONFIG', {
     name: 'logs.db',
     tables:

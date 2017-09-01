@@ -10,26 +10,40 @@ angular.module('starter.controllers', ['firebase', 'ngCordova'])
       $location.path('/login');
     }
     */
+
 })
 
 //Logs page controller-------------------------------------------------------------------------------
 .controller('LogsCtrl', function($scope, $cordovaSQLite )
 {
 
-  $scope.save = function(newLog, newComment)
+  $scope.save = function(newLog, newComment, $cordovaSQLite)
   {
     // execute INSERT statement with parameter
        $cordovaSQLite.execute(db, 'INSERT INTO DOCUMENT (log) VALUES (?)', [newLog])
            .then(function(result) {
-               $scope.statusMessage = "Log saved successful, cheers!";
-           }, function(error) {
-               $scope.statusMessage = "Error on saving: " + error.message;
+               $scope.statusLog = "Log saved successful, cheers!";
+               $scope.statusComment = "Comment saved successful, cheers!";
+           }, function(error)
+           {
+               $scope.statusLog= "Error on saving: " + error.statusLog;
+               $scope.statusLog= "Error on saving: " + error.statusComment;
            })
-    }
+    }//save
 
-    $scope.load = function()
+    $scope.load = function(newLog, newComment, $cordovaSQLite)
     {
           // Execute SELECT statement to load message from database.
+          var db = null;
+
+          //setDB function
+          function setDB()
+          {
+            var db = null;
+          }//setDB
+          setTimeout(setDB, 10);
+          console.log('Got a db variable! %s', db);
+
           $cordovaSQLite.execute(db, 'SELECT * FROM logs')
               .then(
                   function(result)
@@ -48,7 +62,7 @@ angular.module('starter.controllers', ['firebase', 'ngCordova'])
                     $scope.statusLog  = "Error on saving: " + error.message;
                     $scope.statusComment  = "Error on saving: " + error.message;
                   });
-      }
+      }//load
 
 })
 

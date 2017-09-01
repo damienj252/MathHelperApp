@@ -19,15 +19,7 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
   {
     console.log('ready');
 
-    var db = null;
-
-    function setDB()
-    {
-      db = null;
-    }//setDB
-      setTimeout(setDB, 10);
-      console.log('Got a db variable! %s', db);
-
+    //if statement
     if (window.cordova && window.cordova.plugins.Keyboard)
     {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -36,144 +28,147 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
     {
         StatusBar.styleDefault();
     }//if
+    //end of if's
 
-      try
+    var db = null;
+
+    //setDB function
+    function setDB()
+    {
+      var db = null;
+    }//setDB
+    setTimeout(setDB, 10);
+    console.log('Got a db variable! %s', db);
+
+
+    var db = $cordovaSQLite.openDatabase({name:'DOCUMENT',location:'default'}, SQLiteDatabase.CREATE_IF_NECESSARY);
+    console.log('Open the database');
+
+    $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS DOCUMENT (log TEXT, comment TEXT)');
+    console.log('Creates the database');
+
+    // Instantiate database file/connection after ionic platform is ready.
+    db = $cordovaSQLite.openDatabase({name:"logs.db"});
+    $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS Data (newLog TEXT , newComment TEXT)');
+
+//save----------------------------------------------------------------------------------------------------------------
+    $scope.save = function(newLog, newComment)
+    {
+      $cordovaSQLite.execute(db, 'INSERT INTO Data(newLog, newComment) VALUES (?,?)', [newLog], [newComment])
+      .then(function(result)
       {
-          db = $cordovaSQLite.openDB({name:"logs.db",location:'default'});
-          var db = window.sqlitePlugin.openDatabase({name: 'my.db', iosDatabaseLocation: 'Library'});
-          console.log('Open the database');
-      }//try
-      catch (error)
+          $scope.statusLog = "Log saved successful, cheers!";
+          $scope.statusComment = "Comment saved successful, cheers!";
+      },function(error)
       {
-          alert(error);
-      }//catch
+        $scope.statusLog  = "Error on saving: " + error.message;
+        $scope.statusComment  = "Error on saving: " + error.message;
+      })
+  }//end of the save function
+//load----------------------------------------------------------------------------------------------------------------
+  $scope.load = function()
+  {
+        // Execute SELECT statement to load message from database.
+        $cordovaSQLite.execute(db, 'SELECT * FROM LOGS ORDER BY log DESC')
+      .then(
+          function(res) {
 
+              if (res.rows.length > 0) {
 
-      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS DOCUMENT (log TEXT, comment TEXT)');
-      console.log('Creates the database');
+                  $scope.newLog = res.rows.item(0).logs;
+                  $scope.newComment = res.rows.item(0).comment;
+                  $scope.statusLog = "Logs loaded successful, cheers!";
+                  $scope.statusComment = "Logs loaded successful, cheers!";
+              }
+          },
+          function(error) {
+              $scope.statusMessage = "Error on loading: " + error.message;
+          }
+      );
+    }//load function
 
-      // Instantiate database file/connection after ionic platform is ready.
-      db = $cordovaSQLite.openDatabase({name:"logs.db"});
-      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS Data (newLog TEXT , newComment TEXT)');
+});//end of the ready function
 
-
-      $scope.save = function(newLog, newComment)
-      {
-        $cordovaSQLite.execute(db, 'INSERT INTO Data(newLog, newComment) VALUES (?,?)', [newLog], [newComment])
-            .then(function(result)
-            {
-                $scope.statusLog = "Log saved successful, cheers!";
-                $scope.statusComment = "Comment saved successful, cheers!";
-            },function(error)
-            {
-              $scope.statusLog  = "Error on saving: " + error.message;
-              $scope.statusComment  = "Error on saving: " + error.message;
-            })
-        }//end of the save function
-
-        $scope.load = function()
-        {
-              // Execute SELECT statement to load message from database.
-              $cordovaSQLite.execute(db, 'SELECT * FROM LOGS ORDER BY log DESC')
-            .then(
-                function(res) {
-
-                    if (res.rows.length > 0) {
-
-                        $scope.newLog = res.rows.item(0).logs;
-                        $scope.newComment = res.rows.item(0).comment;
-                        $scope.statusLog = "Logs loaded successful, cheers!";
-                        $scope.statusComment = "Logs loaded successful, cheers!";
-                    }
-                },
-                function(error) {
-                    $scope.statusMessage = "Error on loading: " + error.message;
-                }
-            );
-          }//load function
-
-  });//end of the ready function
-
-  $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
-    // We can catch the error thrown when the $requireAuth promise is rejected
-    // and redirect the user back to the home page
-    if (error === 'AUTH_REQUIRED') {
-      $state.go('login');
-    }
-  });
+$rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
+  // We can catch the error thrown when the $requireAuth promise is rejected
+  // and redirect the user back to the home page
+  if (error === 'AUTH_REQUIRED') {
+    $state.go('login');
+  }
+});
 }//ApplicationRun---------------------------------------------------------------------------------------------------
 
 ApplicationRun.$inject = ['$ionicPlatform', '$rootScope', '$state'];
 
 function AuthDataResolver(Auth)
 {
-  return Auth.$requireAuth();
+return Auth.$requireAuth();
 }
 AuthDataResolver.$inject = ['Auth'];
 
 function ApplicationConfig($stateProvider, $urlRouterProvider)
 {
 
-  $stateProvider
+$stateProvider
 
-  .state('login',
-  {
-    url: '/login',
-    templateUrl: 'templates/login.html',
-    controller: 'LoginCtrl as ctrl'
-  })
+.state('login',
+{
+  url: '/login',
+  templateUrl: 'templates/login.html',
+  controller: 'LoginCtrl as ctrl'
+})
 
-  // setup an abstract state for the tabs directive
-  .state('tab',
+// setup an abstract state for the tabs directive
+.state('tab',
+{
+  url: '/tab',
+  abstract: true,
+  templateUrl: 'templates/tabs.html',
+  resolve:
   {
-    url: '/tab',
-    abstract: true,
-    templateUrl: 'templates/tabs.html',
-    resolve:
-    {
-      authData: AuthDataResolver
-    }
-  })
+    authData: AuthDataResolver
+  }
+})
 
 //Dashboard ---------------------------------------------------------------------------------
-  .state('tab.dashboard',
-  {
-    url: '/dashboard',
-    views: {
-      'tab-dashboard':
-      {
-        templateUrl: 'templates/tab-dashboard.html',
-        controller: 'DashboardCtrl'
-      }
+.state('tab.dashboard',
+{
+  url: '/dashboard',
+  views: {
+    'tab-dashboard':
+    {
+      templateUrl: 'templates/tab-dashboard.html',
+      controller: 'DashboardCtrl'
     }
-  })
+  }
+})
 //Logs -------------------------------------------------------------------------------------
-  .state('tab.logs', {
-      url: '/logs',
-      views: {
-        'tab-logs': {
-          templateUrl: 'templates/tab-logs.html',
-          controller: 'LogsCtrl'
-        }
-      }
-    })
-//Calculator -------------------------------------------------------------------------------
-  .state('tab.calculator', {
-    url: '/calculator',
+.state('tab.logs', {
+    url: '/logs',
     views: {
-      'tab-calculator': {
-        templateUrl: 'templates/tab-calculator.html',
-        controller: 'CalculatorCtrl'
+      'tab-logs': {
+        templateUrl: 'templates/tab-logs.html',
+        controller: 'LogsCtrl'
       }
     }
   })
+//Calculator -------------------------------------------------------------------------------
+.state('tab.calculator', {
+  url: '/calculator',
+  views: {
+    'tab-calculator': {
+      templateUrl: 'templates/tab-calculator.html',
+      controller: 'CalculatorCtrl'
+    }
+  }
+})
 //-------------------------------------------------------------------------------------------
 /*var example = angular.module('starter', ['ionic', 'ngCordova'])
-  .run(function($ionicPlatform, $cordovaSQLite)
+.run(function($ionicPlatform, $cordovaSQLite)
 {
 })*/
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/login');
+// if none of the above states are matched, use this as the fallback
+$urlRouterProvider.otherwise('/login');
 
 }
 ApplicationConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
