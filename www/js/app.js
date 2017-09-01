@@ -65,7 +65,7 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite, $ngS
      //else - if the statement is false run it as a browser
      else
      {
-       var db = window.openDatabase("logs.db"); // browser
+       var db = window.openDatabase({name:"logs.db", location: 'default', localStorage}); // browser
        console.log("browser");
 
        window.execute(db, 'CREATE TABLE IF NOT EXISTS DOCUMENT (log TEXT, comment TEXT)');
@@ -117,7 +117,7 @@ $scope.save = function(newLog, newComment)
       $scope.statusComment  = "Error on saving: " + error.message;
     })
   }//else
-  
+
 }//end of the save function
 //load----------------------------------------------------------------------------------------------------------------
   $scope.load = function()
