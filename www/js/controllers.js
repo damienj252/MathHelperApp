@@ -19,6 +19,7 @@ angular.module('starter.controllers', ['firebase', 'ngCordova'])
 
   $scope.save = function(newLog, newComment, $cordovaSQLite)
   {
+    
     // execute INSERT statement with parameter
        $cordovaSQLite.execute(db, 'INSERT INTO DOCUMENT (log) VALUES (?)', [newLog])
            .then(function(result) {
@@ -29,6 +30,15 @@ angular.module('starter.controllers', ['firebase', 'ngCordova'])
                $scope.statusLog= "Error on saving: " + error.statusLog;
                $scope.statusLog= "Error on saving: " + error.statusComment;
            })
+           /*
+           //Attempt at localStorage
+           var _add = function (newLog, newComment)
+           {
+             $localStorage.logs.push(newLog);
+             $localStorage.comments.push(newComment);
+           }
+           */
+
     }//save
 
     $scope.load = function(newLog, newComment, $cordovaSQLite)

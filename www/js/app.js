@@ -13,7 +13,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
 
 //ApplicationRun-----------------------------------------------------------------------------
-function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
+function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite, $ngStorage)
 {
   $ionicPlatform.ready(function($scope, $stateParams,$cordovaSQLite)
   {
@@ -88,6 +88,7 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
 //save----------------------------------------------------------------------------------------------------------------
 $scope.save = function(newLog, newComment)
 {
+
   //if- save the data on the device
   if(cordova.window)
   {
@@ -116,6 +117,7 @@ $scope.save = function(newLog, newComment)
       $scope.statusComment  = "Error on saving: " + error.message;
     })
   }//else
+  
 }//end of the save function
 //load----------------------------------------------------------------------------------------------------------------
   $scope.load = function()
