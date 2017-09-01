@@ -40,7 +40,8 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
     setTimeout(setDB, 10);
     console.log('Got a db variable! %s', db);
 
-
+//Device--------------------------------------------------------------------------------------------------------------
+    /*
     var db = $cordovaSQLite.openDatabase({name:'DOCUMENT',location:'default'}, SQLiteDatabase.CREATE_IF_NECESSARY);
     console.log('Open the database');
 
@@ -50,10 +51,46 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
     // Instantiate database file/connection after ionic platform is ready.
     db = $cordovaSQLite.openDatabase({name:"logs.db"});
     $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS Data (newLog TEXT , newComment TEXT)');
+    */
+
+    //if - if the statement is true run the code (cordova) for a device
+    if (window.cordova)
+    {
+      var db = $cordovaSQLite.openDatabase({name:'logs.db',location:'default'}, SQLiteDatabase.CREATE_IF_NECESSARY);
+      console.log("IOS");
+
+      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS DOCUMENT (log TEXT, comment TEXT)');
+      console.log('Creates the database');
+    }//if
+     //else - if the statement is false run it as a browser
+     else
+     {
+       var db = window.openDatabase("logs.db"); // browser
+       console.log("browser");
+
+       window.execute(db, 'CREATE TABLE IF NOT EXISTS DOCUMENT (log TEXT, comment TEXT)');
+       console.log('Creates the database');
+     }//else
+
+//Window--------------------------------------------------------------------------------------------------------------
+  /*
+    var db = window.openDatabase({name:'DOCUMENT',location:'default'});
+    console.log('Open the database');
+
+    window.execute(db, 'CREATE TABLE IF NOT EXISTS DOCUMENT (log TEXT, comment TEXT)');
+    console.log('Creates the database');
+
+    // Instantiate database file/connection after ionic platform is ready.
+    db = window.openDatabase({name:"logs.db"});
+    window.execute(db, 'CREATE TABLE IF NOT EXISTS Data (newLog TEXT , newComment TEXT)');
+*/
 
 //save----------------------------------------------------------------------------------------------------------------
-    $scope.save = function(newLog, newComment)
-    {
+$scope.save = function(newLog, newComment)
+{
+  //if- save the data on the device
+  if(cordova.window)
+  {
       $cordovaSQLite.execute(db, 'INSERT INTO Data(newLog, newComment) VALUES (?,?)', [newLog], [newComment])
       .then(function(result)
       {
@@ -64,10 +101,28 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
         $scope.statusLog  = "Error on saving: " + error.message;
         $scope.statusComment  = "Error on saving: " + error.message;
       })
-  }//end of the save function
+  }//if
+  //else - save the data on the browser
+  else
+  {
+    window.execute(db, 'INSERT INTO Data(newLog, newComment) VALUES (?,?)', [newLog], [newComment])
+    .then(function(result)
+    {
+        $scope.statusLog = "Log saved successful, cheers!";
+        $scope.statusComment = "Comment saved successful, cheers!";
+    },function(error)
+    {
+      $scope.statusLog  = "Error on saving: " + error.message;
+      $scope.statusComment  = "Error on saving: " + error.message;
+    })
+  }//else
+}//end of the save function
 //load----------------------------------------------------------------------------------------------------------------
   $scope.load = function()
   {
+    //if - load the data from the device
+    if(cordova.window)
+    {
         // Execute SELECT statement to load message from database.
         $cordovaSQLite.execute(db, 'SELECT * FROM LOGS ORDER BY log DESC')
       .then(
@@ -84,7 +139,28 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite)
           function(error) {
               $scope.statusMessage = "Error on loading: " + error.message;
           }
-      );
+        );
+      }//if
+      else
+      {
+        // Execute SELECT statement to load message from database.
+        window.execute(db, 'SELECT * FROM LOGS ORDER BY log DESC')
+      .then(
+          function(res) {
+
+              if (res.rows.length > 0) {
+
+                  $scope.newLog = res.rows.item(0).logs;
+                  $scope.newComment = res.rows.item(0).comment;
+                  $scope.statusLog = "Logs loaded successful, cheers!";
+                  $scope.statusComment = "Logs loaded successful, cheers!";
+              }
+          },
+          function(error) {
+              $scope.statusMessage = "Error on loading: " + error.message;
+          }
+        );
+      }//else
     }//load function
 
 });//end of the ready function
