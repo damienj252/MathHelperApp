@@ -65,7 +65,7 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite, $ngS
      //else - if the statement is false run it as a browser
      else
      {
-       var db = window.openDatabase({name:"logs.db", location: 'default', localStorage}); // browser
+       var db = window.openDatabase('logs.db', '1.0', 'my first database', 2 * 1024 * 1024); // browser
        console.log("browser");
 
        window.execute(db, 'CREATE TABLE IF NOT EXISTS DOCUMENT (log TEXT, comment TEXT)');
