@@ -65,11 +65,20 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite, $ngS
      //else - if the statement is false run it as a browser
      else
      {
-       var db = window.openDatabase('logs.db', '1.0', 'my first database', 2 * 1024 * 1024); // browser
-       console.log("browser");
+       window.sqlitePlugin = {};
+       window.sqlitePlugin.openDatabase = function()
+       {
+         return window.openDatabase('logs.db', '1.0', 'myDatabase', 10000000);
+         console.log('Creates the database');
+       };
 
-       window.execute(db, 'CREATE TABLE IF NOT EXISTS DOCUMENT (log TEXT, comment TEXT)');
-       console.log('Creates the database');
+
+       var db = window.openDatabase('logs.db', '1.0', 'my first database', 2 * 1024 * 1024); // browser
+       console.log("Open database browser");
+
+      // var db = window.execute(db, 'CREATE TABLE IF NOT EXISTS DOCUMENT (log TEXT, comment TEXT)');
+      // console.log('Creates the database');
+
      }//else
 
 //Window--------------------------------------------------------------------------------------------------------------
@@ -86,7 +95,8 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite, $ngS
 */
 
 //save----------------------------------------------------------------------------------------------------------------
-$scope.save = function(newLog, newComment)
+var scope = $rootScope.$new();
+scope.save = function(newLog, newComment)
 {
 
   //if- save the data on the device
@@ -119,9 +129,11 @@ $scope.save = function(newLog, newComment)
   }//else
 
 }//end of the save function
+
 //load----------------------------------------------------------------------------------------------------------------
-  $scope.load = function()
-  {
+var scope = $rootScope.$new();
+scope.load = function()
+{
     //if - load the data from the device
     if(cordova.window)
     {
