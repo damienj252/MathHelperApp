@@ -93,13 +93,15 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite, $ngS
 */
 
 //save----------------------------------------------------------------------------------------------------------------
-var scope = $rootScope.$new();
-scope.save = function(newLog, newComment)
+console.log("Save property");
+
+//var save = $rootScope.$new();
+$rootScope.save = function(newLog, newComment)
 {
   //if- save the data on the device
   if (window.cordova && window.cordova.plugins.Keyboard)
   {
-      $cordovaSQLite.execute(db, 'INSERT INTO Data(newLog, newComment) VALUES (?,?)', [newLog], [newComment])
+      $cordovaSQLite.execute(db, 'INSERT INTO DOCUMENT(newLog, newComment) VALUES (?,?)', [newLog], [newComment])
       .then(function(result)
       {
           $scope.statusLog = "Log saved successful, cheers!";
@@ -113,18 +115,21 @@ scope.save = function(newLog, newComment)
   //else - save the data on the browser
   else
   {
-    console.log("Start of save");
-    window.execute(db, 'INSERT INTO Data(newLog, newComment) VALUES (?,?)', [newLog], [newComment])
-    .then(function(result)
-    {
-        $scope.statusLog = "Log saved successful, cheers!";
-        $scope.statusComment = "Comment saved successful, cheers!";
-        console.log("Save");
-    },function(error)
-    {
-      $scope.statusLog  = "Error on saving: " + error.message;
-      $scope.statusComment  = "Error on saving: " + error.message;
-    })
+      var db = function()
+      {
+
+      window.execute(db, 'INSERT INTO DOCUMENT(newLog, newComment) VALUES (?,?)', [newLog], [newComment])
+      .then(function(result)
+      {
+          $scope.statusLog = "Log saved successful, cheers!";
+          $scope.statusComment = "Comment saved successful, cheers!";
+          console.log("Save");
+      },function(error)
+      {
+        $scope.statusLog  = "Error on saving: " + error.message;
+        $scope.statusComment  = "Error on saving: " + error.message;
+      })
+    }//db
   }//else
 
 }//end of the save function
