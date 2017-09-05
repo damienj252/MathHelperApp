@@ -63,16 +63,17 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite, $ngS
      //else - if the statement is false run it as a browser
      else
      {
+       //Creating openDatabase to be a function
        window.sqlitePlugin = {};
        window.sqlitePlugin.openDatabase = function()
        {
          return window.openDatabase('logs.db', '1.0', 'myDatabase', 10000000);
          console.log('Creates the database');
-       };
 
+         var db = window.openDatabase('logs.db', '1.0', 'my first database', 2 * 1024 * 1024); // browser
+         console.log("Open database browser");
+       }//window.sqlitePlugin
 
-       var db = window.openDatabase('logs.db', '1.0', 'my first database', 2 * 1024 * 1024); // browser
-       console.log("Open database browser");
 
       // var db = window.execute(db, 'CREATE TABLE IF NOT EXISTS DOCUMENT (log TEXT, comment TEXT)');
       // console.log('Creates the database');
@@ -96,7 +97,8 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite, $ngS
 console.log("Save property");
 
 //var save = $rootScope.$new();
-$rootScope.save = function(newLog, newComment)
+var scope = $rootScope.$new();
+scope.save = function(newLog, newComment)
 {
   //if- save the data on the device
   if (window.cordova && window.cordova.plugins.Keyboard)
@@ -106,10 +108,12 @@ $rootScope.save = function(newLog, newComment)
       {
           $scope.statusLog = "Log saved successful, cheers!";
           $scope.statusComment = "Comment saved successful, cheers!";
+          console.log("Log and Comment saved to the database");
       },function(error)
       {
         $scope.statusLog  = "Error on saving: " + error.message;
         $scope.statusComment  = "Error on saving: " + error.message;
+        console.log("Error with saving to the database");
       })
   }//if
   //else - save the data on the browser

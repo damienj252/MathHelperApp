@@ -20,10 +20,14 @@ angular.module('starter.controllers', ['firebase', 'ngCordova'])
   var scope = $rootScope.$new();
   scope.save = function(newLog, newComment, $cordovaSQLite)
   {
+    //if- save the data on the device
+    if (window.cordova && window.cordova.plugins.Keyboard)
+    {
     // execute INSERT statement with parameter
-       $cordovaSQLite.execute(db, 'INSERT INTO DOCUMENT (newLog) VALUES (?)', [newLog])
+       $cordovaSQLite.execute(db, 'INSERT INTO DOCUMENT (newLog),(newComment) VALUES (?),(?)', [newLog], [newComment])
            .then(function(result) {
                $scope.statusLog = "Log saved successful, cheers!";
+               $scope.statusComment = "Log saved successful, cheers!";
                console.log('Log added')
            }, function(error)
            {
@@ -31,15 +35,6 @@ angular.module('starter.controllers', ['firebase', 'ngCordova'])
                console.log('Issue with adding log')
            })
 
-     // execute INSERT statement with parameter
-        $cordovaSQLite.execute(db, 'INSERT INTO DOCUMENT (newComment) VALUES (?)', [newComment])
-            .then(function(result) {
-                $scope.statusLog = "Log saved successful, cheers!";
-                $scope.statusComment = "Comment saved successful, cheers!";
-            }, function(error)
-            {
-                $scope.statusLog= "Error on saving: " + error.statusComment;
-            })
            /*
            //Attempt at localStorage
            var _add = function (newLog, newComment)
@@ -48,6 +43,25 @@ angular.module('starter.controllers', ['firebase', 'ngCordova'])
              $localStorage.comments.push(newComment);
            }
            */
+        }//if
+        else
+        {
+          var db = function()
+          {
+
+          window.execute(db, 'INSERT INTO DOCUMENT(newLog, newComment) VALUES (?,?)', [newLog], [newComment])
+          .then(function(result)
+          {
+              $scope.statusLog = "Log saved successful, cheers!";
+              $scope.statusComment = "Comment saved successful, cheers!";
+              console.log("Save");
+          },function(error)
+          {
+            $scope.statusLog  = "Error on saving: " + error.message;
+            $scope.statusComment  = "Error on saving: " + error.message;
+          })
+        }//db
+      }//else
 
     }//save
     var scope = $rootScope.$new();
