@@ -1,7 +1,6 @@
 <ion-view view-title="Log Page">
   <ion-content class="padding" ng-controller="LogsCtrl">
-    <ionic-scroll scrollX="true">
-      <ionic-scroll scrollY="true">
+    <ion-scroll direction="x" style="height: calc(300vh - 300px); ">
     <br />
 
     <div class="card">
@@ -17,15 +16,15 @@
     </div>
     <button class="button button-block button-calm" ng-click="save(newLog, newComment)" controller="LogsCtrl" >Add</button>
     <button class="button button-block button-calm" ng-click="load(newLog, newComment)" >Show logs</button>
-</div>
+
 
   <div class="item">
     <p>Logs:</p>
     <p>{{ statusLog }}</p>
     <p>{{ statusComment }}</p>
   </div>
+</div>
 
-      </ionic-scroll>
-    </ionic-scroll>
+      </ion-scroll>
   </ion-content>
 </ion-view>

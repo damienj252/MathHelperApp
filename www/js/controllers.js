@@ -14,18 +14,21 @@ angular.module('starter.controllers', ['firebase', 'ngCordova'])
 })
 
 //Logs page controller-------------------------------------------------------------------------------
-.controller('LogsCtrl', function($scope, $cordovaSQLite )
+.controller('LogsCtrl', function($scope, $cordovaSQLite, $rootScope)
 {
 
-  $scope.save = function(newLog, newComment, $cordovaSQLite)
+  var scope = $rootScope.$new();
+  scope.save = function(newLog, newComment, $cordovaSQLite)
   {
     // execute INSERT statement with parameter
        $cordovaSQLite.execute(db, 'INSERT INTO DOCUMENT (newLog) VALUES (?)', [newLog])
            .then(function(result) {
                $scope.statusLog = "Log saved successful, cheers!";
+               console.log('Log added')
            }, function(error)
            {
                $scope.statusLog= "Error on saving: " + error.statusLog;
+               console.log('Issue with adding log')
            })
 
      // execute INSERT statement with parameter
@@ -47,8 +50,8 @@ angular.module('starter.controllers', ['firebase', 'ngCordova'])
            */
 
     }//save
-
-    $scope.load = function(newLog, newComment, $cordovaSQLite)
+    var scope = $rootScope.$new();
+    scope.load = function(newLog, newComment, $cordovaSQLite)
     {
         var db = $cordovaSQLite.execute(db, 'SELECT * FROM logs')
               .then(

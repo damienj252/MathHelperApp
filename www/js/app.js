@@ -1,5 +1,3 @@
-
-
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'firebase', 'ngCordova'])
 
 .constant('FirebaseUrl', 'https://ionicle.firebaseio.com/')
@@ -54,7 +52,7 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite, $ngS
     */
 
     //if - if the statement is true run the code (cordova) for a device
-    if (window.cordova)
+    if (window.cordova && window.cordova.plugins.Keyboard)
     {
       var db = $cordovaSQLite.openDatabase({name:'logs.db',location:'default'}, SQLiteDatabase.CREATE_IF_NECESSARY);
       console.log("IOS");
@@ -98,9 +96,8 @@ function ApplicationRun($ionicPlatform, $rootScope, $state, $cordovaSQLite, $ngS
 var scope = $rootScope.$new();
 scope.save = function(newLog, newComment)
 {
-
   //if- save the data on the device
-  if(cordova.window)
+  if (window.cordova && window.cordova.plugins.Keyboard)
   {
       $cordovaSQLite.execute(db, 'INSERT INTO Data(newLog, newComment) VALUES (?,?)', [newLog], [newComment])
       .then(function(result)
@@ -116,11 +113,13 @@ scope.save = function(newLog, newComment)
   //else - save the data on the browser
   else
   {
+    console.log("Start of save");
     window.execute(db, 'INSERT INTO Data(newLog, newComment) VALUES (?,?)', [newLog], [newComment])
     .then(function(result)
     {
         $scope.statusLog = "Log saved successful, cheers!";
         $scope.statusComment = "Comment saved successful, cheers!";
+        console.log("Save");
     },function(error)
     {
       $scope.statusLog  = "Error on saving: " + error.message;
@@ -135,7 +134,7 @@ var scope = $rootScope.$new();
 scope.load = function()
 {
     //if - load the data from the device
-    if(cordova.window)
+    if(window.sqlitePlugin)
     {
         // Execute SELECT statement to load message from database.
         $cordovaSQLite.execute(db, 'SELECT * FROM LOGS ORDER BY log DESC')
